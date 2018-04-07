@@ -1,0 +1,2 @@
+# MastodonUpdateScript
+Mastodonのアップデートをよしなにしてくれるもの

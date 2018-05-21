@@ -18,9 +18,6 @@ sudo apt -y install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file g
 # Install rbenv
 sudo apt install rbenv 
 
-# Restart bash
-exec bash
-
 # Install ruby-build as rbenv plugin
 sudo su -l mastodon "rbenv install 2.5.0 && rbenv global 2.5.0"
 

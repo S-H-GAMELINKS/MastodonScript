@@ -21,7 +21,7 @@ sudo apt install rbenv
 # Install ruby-build as rbenv plugin
 sudo su -l mastodon -c "rbenv install 2.5.0 && rbenv global 2.5.0"
 
-sudo su -l mastodon "cd ~ && git clone https://github.com/tootsuite/mastodon.git live && cd ~/live && git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1) && gem install bundler && bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test && yarn install --pure-lockfile"
+sudo su -l mastodon -c "cd ~ && git clone https://github.com/tootsuite/mastodon.git live && cd ~/live && git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1) && gem install bundler && bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test && yarn install --pure-lockfile"
 
 sudo su postgres -c 'CREATE USER mastodon CREATEDB;'
 

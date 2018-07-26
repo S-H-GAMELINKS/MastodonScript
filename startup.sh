@@ -31,6 +31,8 @@ sudo systemctl stop nginx
 
 sudo letsencrypt certonly --standalone -d $1
 
+cd /etc/letsencrypt && sudo chmod 777 live && sudo chmod 777 $1
+
 sudo systemctl start nginx
 
 sudo su -l mastodon "cd ~/live && RAILS_ENV=production bundle exec rake mastodon:setup"

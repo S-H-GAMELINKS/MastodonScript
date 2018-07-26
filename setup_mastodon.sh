@@ -1,4 +1,4 @@
-sudo su postgres -c 'CREATE USER mastodon CREATEDB;'
+sudo -u postgres psql
 
 sudo vi /etc/nginx/sites-available/$1.conf
 cd /etc/nginx/sites-enabled

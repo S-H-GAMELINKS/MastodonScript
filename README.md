@@ -1,10 +1,12 @@
 # MastodonUpdateScript
 ## 概要
-Mastodonのアップデートをよしなにしてくれるもの
+Mastodonのインストール＆アップデートをよしなにしてくれるもの
 
-基本的に、[公式ドキュメント](https://github.com/tootsuite/documentation/blob/master/Running-Mastodon/Production-guide.md)通りにインスタンスを設置してあれば、そのまま使えます。
+基本的に、[公式ドキュメント](https://github.com/tootsuite/documentation/blob/master/Running-Mastodon/Production-guide.md)通りにインスタンスを設置します。
 
 独自実装などをしているなどの場合は適宜書き換えてご使用ください。
+
+
 
 ## 参考
 

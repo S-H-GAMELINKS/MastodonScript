@@ -15,21 +15,9 @@ sudo apt update
 # All need prigram install
 sudo apt -y install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file git-core g++ libprotobuf-dev protobuf-compiler pkg-config nodejs gcc autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev nginx redis-server redis-tools postgresql postgresql-contrib letsencrypt yarn libidn11-dev libicu-dev
 
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-cd ~/.rbenv && src/configure && make -C src
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-# Check if rbenv is correctly installed
-type rbenv
-# Install ruby-build as rbenv plugin
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-rbenv install 2.5.0 && rbenv global 2.5.0
+sudo su -l mastodon -c "git clone https:github.com/S-H-GAMELINKS/MastodonScript script && cd script && sh rbenv_install.sh"
 
-# Install rbenv
-sudo apt install rbenv 
-
-# Install ruby-build as rbenv plugin
-sudo su -l mastodon -c "rbenv install 2.5.0 && rbenv global 2.5.0"
+sudo su -l mastodon -c "cd script && sh ruby_install.sh"
 
 sudo su -l mastodon -c "cd ~ && git clone https://github.com/tootsuite/mastodon.git live && cd ~/live && git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1) && gem install bundler && bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test && yarn install --pure-lockfile"
 

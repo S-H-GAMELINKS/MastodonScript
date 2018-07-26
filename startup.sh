@@ -23,7 +23,7 @@ sudo su -l mastodon -c "cd ~ && git clone https://github.com/tootsuite/mastodon.
 
 sudo su postgres -c 'CREATE USER mastodon CREATEDB;'
 
-sudo vi /etc/nginx/sites-available/$1.conf
+vi /etc/nginx/sites-available/$1.conf
 cd /etc/nginx/sites-enabled
 sudo ln -s ../sites-available/$1.conf
 

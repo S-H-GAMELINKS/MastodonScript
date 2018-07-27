@@ -23,7 +23,9 @@ sudo su -l mastodon -c "git clone https://github.com/rbenv/ruby-build.git ~/.rbe
 
 su - mastodon
 
-sudo su -l mastodon -c "cd ~ && git clone https://github.com/tootsuite/mastodon.git live && cd ~/live && git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1) && gem install bundler && bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test && yarn install --pure-lockfile"
+sudo su -l mastodon -c "cd ~ && git clone https://github.com/tootsuite/mastodon.git live && cd ~/live && git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1)"
+
+su - mastodon 
 
 sudo -u postgres psql
 

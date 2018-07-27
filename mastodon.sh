@@ -15,7 +15,7 @@ sudo apt update
 # All need prigram install
 sudo apt -y install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file git-core g++ libprotobuf-dev protobuf-compiler pkg-config nodejs gcc autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev nginx redis-server redis-tools postgresql postgresql-contrib letsencrypt yarn libidn11-dev libicu-dev
 
-sudo su -l mastodon -c  "cd ~ && git clone https://github.com/rbenv/rbenv.git ~/.rbenv && cd ~/.rbenv && src/configure && make -C src && echo 'export PATH="/home/mastodon/.rbenv/bin:/home/mastodon/bin:/home/mastodon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"' >> ~/.bashrc && echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
+sudo su -l mastodon -c  "cd ~ && git clone https://github.com/rbenv/rbenv.git ~/.rbenv && cd ~/.rbenv && src/configure && make -C src"
 
 su - mastodon 
 

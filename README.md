@@ -242,7 +242,24 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
+## Mastodonのアップデート
 
+同梱されている`update.sh`を`mastodon`アカウントで実行すればアップデートは自動的に処理されます。
+
+```
+su - mastodon
+cd script
+sh update.sh
+```
+
+アップデート終了後、`root`へ戻り、Mastodonを再起動します。
+
+```
+exit
+sudo systemctl restart mastodon-*.service
+```
+
+環境によっては足りないライブラリなどがあると思うので、それらは適宜インストールしてご利用ください。
 
 
 ## 参考

@@ -6,6 +6,12 @@ Mastodonのインストール＆アップデートをよしなにしてくれる
 
 独自実装などをしているなどの場合は適宜書き換えてご使用ください。
 
+## License
+
+These codes are licensed under CC0.
+
+[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png "CC0")](http://creativecommons.org/publicdomain/zero/1.0/deed.ja)
+
 ## Mastodonのインストール
 
 まず、`git clone` し、作成した `script` ディレクトリに移動します。

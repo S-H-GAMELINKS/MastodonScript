@@ -17,7 +17,7 @@ sudo apt -y install imagemagick ffmpeg libpq-dev libxml2-dev libxslt1-dev file g
 
 sudo su -l mastodon -c  "cd ~ && git clone https://github.com/rbenv/rbenv.git ~/.rbenv && cd ~/.rbenv && src/configure && make -C src && echo 'export PATH="/home/mastodon/.rbenv/bin:/home/mastodon/bin:/home/mastodon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"' >> ~/.bashrc && echo 'eval "$(rbenv init -)"' >> ~/.bashrc"
 
-sudo su -l mastodon -c "source ~/.bashrc"
+sudo su -l mastodon -c "bash -lc"
 
 sudo su -l mastodon -c "git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build && rbenv install 2.5.1 && rbenv global 2.5.1"
 

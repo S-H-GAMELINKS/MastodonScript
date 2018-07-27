@@ -39,7 +39,7 @@ cd /etc/letsencrypt && sudo chmod 777 live && sudo chmod 777 $1
 
 sudo systemctl start nginx
 
-sudo su -l mastodon -c "cd ~/live && RAILS_ENV=production bundle exec rake mastodon:setup"
+su - mastodon
 
 sudo vi /etc/systemd/system/mastodon-web.service
 sudo vi /etc/systemd/system/mastodon-sidekiq.service

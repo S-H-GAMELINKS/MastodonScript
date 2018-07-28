@@ -469,7 +469,7 @@ WantedBy=multi-user.target
 ```
 
 
-## Mastodonのアップデート
+## Mastodonのアップデート(update.shを使う場合)
 
 同梱されている`update.sh`を`mastodon`アカウントで実行すればアップデートは自動的に処理されます。
 
@@ -488,6 +488,18 @@ sudo systemctl restart mastodon-*.service
 
 環境によっては足りないライブラリなどがあると思うので、それらは適宜インストールしてご利用ください。
 
+## Mastodonのアップデート(mastodon_update.shを使う場合)
+
+同梱されている`mastodon_update.sh`を`root`アカウントで実行すればアップデートは自動的に処理されます。
+
+```
+cd script
+sh update.sh
+```
+
+アップデート終了後、自動的にMastodonを再起動します。
+
+環境によっては足りないライブラリなどがあると思うので、それらは適宜インストールしてご利用ください。
 
 ## 参考
 

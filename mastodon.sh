@@ -5,7 +5,7 @@ sudo adduser mastodon
 sudo apt update && sudo apt upgrade
 
 # Add node.js Repository
-sudo apt -y install curl && sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
+sudo apt -y install curl && sudo curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
 
 # Add Yarn Repository
 sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -

@@ -12,7 +12,227 @@ These codes are licensed under CC0.
 
 [![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png "CC0")](http://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
-## Mastodonのインストール
+## Mastodonのインストール(mastodon.shを使う場合)
+
+まず、`git clone` し、作成した `script` ディレクトリに移動します。
+
+```
+git clone https://github.com/S-H-GAMELINKS/MastodonScript.git script　&& cd script
+```
+
+次に、`mastodon.sh` を実行するだけ
+
+```
+sh mastodon.sh <domain>
+```
+
+しばらくすると`mastodon`アカウントへのログインを実行します。
+パスワードを入力後、以下のコマンドを実行してください
+
+```
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc && echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+source ~/.bashrc
+exit
+```
+
+その後、再び`mastodon`アカウントへのログインを実行します。
+再度、パスワードを入力してください。
+ログイン後以下のコマンドを実行してください。
+
+```
+rbenv install 2.5.1 && rbenv global 2.5.1
+exit
+```
+
+もう一度、`mastodon`アカウントへのログインを実行しますので
+以下のコマンドを実行してください。
+
+```
+cd ~/live && gem install bundler && bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test && yarn install --pure-lockfile
+```
+
+その後、`postgres`が起動するので、以下のコマンドを入力。
+
+```
+CREATE USER mastodon CREATEDB;
+\q
+```
+
+また、Nginxの設定を編集するために`vi`が起動した際には、以下の内容を編集して貼り付けること
+
+```
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name <ドメイン>;
+  root /home/mastodon/live/public;
+  # Useful for Let's Encrypt
+  location /.well-known/acme-challenge/ { allow all; }
+  location / { return 301 https://$host$request_uri; }
+}
+
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name <ドメイン>;
+
+  ssl_protocols TLSv1.2;
+  ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:10m;
+
+  ssl_certificate     /etc/letsencrypt/live/<ドメイン>/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/<ドメイン>/privkey.pem;
+
+  keepalive_timeout    70;
+  sendfile             on;
+  client_max_body_size 8m;
+
+  root /home/mastodon/live/public;
+
+  gzip on;
+  gzip_disable "msie6";
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 6;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+  add_header Strict-Transport-Security "max-age=31536000";
+
+  location / {
+    try_files $uri @proxy;
+  }
+
+  location ~ ^/(emoji|packs|system/accounts/avatars|system/media_attachments/files) {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    try_files $uri @proxy;
+  }
+  
+  location /sw.js {
+    add_header Cache-Control "public, max-age=0";
+    try_files $uri @proxy;
+  }
+
+  location @proxy {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Proxy "";
+    proxy_pass_header Server;
+
+    proxy_pass http://127.0.0.1:3000;
+    proxy_buffering off;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
+    tcp_nodelay on;
+  }
+
+  location /api/v1/streaming {
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Proxy "";
+
+    proxy_pass http://127.0.0.1:4000;
+    proxy_buffering off;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+
+    tcp_nodelay on;
+  }
+
+  error_page 500 501 502 503 504 /500.html;
+}
+```
+
+その後、Letsencryptが起動し、メールアドレスと規約の確認を要求されます。
+メールアドレスを入力して進んでください。
+
+再び、`mastodon`アカウントにログインします。
+以下のコマンドを実行して、Mastodonの本番環境の設定を編集します。
+
+```
+cd ~/live && RAILS_ENV=production bundle exec rake mastodon:setup
+exit
+```
+最後に、Mastodonのserviceファイル編集の為にviが起動するので
+以下の内容をそれぞれの`service`に張り付ける。
+
+```
+[Unit]
+Description=mastodon-web
+After=network.target
+
+[Service]
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+Environment="RAILS_ENV=production"
+Environment="PORT=3000"
+ExecStart=/home/mastodon/.rbenv/shims/bundle exec puma -C config/puma.rb
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+[Unit]
+Description=mastodon-sidekiq
+After=network.target
+
+[Service]
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+Environment="RAILS_ENV=production"
+Environment="DB_POOL=5"
+ExecStart=/home/mastodon/.rbenv/shims/bundle exec sidekiq -c 5 -q default -q mailers -q pull -q push
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+[Unit]
+Description=mastodon-streaming
+After=network.target
+
+[Service]
+Type=simple
+User=mastodon
+WorkingDirectory=/home/mastodon/live
+Environment="NODE_ENV=production"
+Environment="PORT=4000"
+ExecStart=/usr/bin/npm run start
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+この後、アドレスバーに設定したドメインを入力してMasotodonが表示されていたら、インスタンスの設置は完了です
+
+## Mastodonのインストール(mastodon.shを使わない場合)
 
 まず、`git clone` し、作成した `script` ディレクトリに移動します。
 
@@ -247,6 +467,7 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 ```
+
 
 ## Mastodonのアップデート
 
